@@ -1,0 +1,68 @@
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #141414; /* Dark background for a movie app */
+  color: white; /* White text for contrast */
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  margin: 20px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 300px;
+  font-size: 1rem;
+}
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 20px;
+  width: 100%;
+  max-width: 1200px; /* Center the content */
+}
+
+.movie-card {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 10px; /* Rounded corners */
+  overflow: hidden; /* Round corners for images */
+  background: rgba(255, 255, 255, 0.1); /* Slight background color for cards */
+  position: relative;
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px; /* Rounded corners for images */
+  transition: transform 0.2s; /* Image zoom effect */
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card:hover img {
+  transform: scale(1.1); /* Zoom in image on hover */
+}
+
+/* Add responsive text */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  input {
+    width: 80%;
+  }
+}

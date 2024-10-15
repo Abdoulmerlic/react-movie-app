@@ -4,7 +4,8 @@ import MovieDetails from './MovieDetails'; // Import your MovieDetails component
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
-  
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -23,19 +24,33 @@ const Home = () => {
     fetchMovies();
   }, []);
 
-  return (
-    <div>
-      <h1>Movie List</h1>
-      {error && <p>Error: {error}</p>}
-      {movies.length > 0 ? (
-        movies.map(movie => (
-          <MovieDetails key={movie.id} movie={movie} /> // Use MovieDetails instead of MovieCard
-        ))
-      ) : (
-        <p>Loading movies...</p>
-      )}
-    </div>
+  const filteredMovies = movies.filter(movie => 
+    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  return (
+    <div className="home">
+      <h1>Movie List</h1>
+      <input 
+        type="text" 
+        placeholder="Search for a movie..." 
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)} 
+      />
+      {error && <p>Error: {error}</p>}
+      <div className="movie-list">
+        {filteredMovies.length > 0 ? (
+          filteredMovies.map(movie => (
+            <div className="movie-card" key={movie.id}>
+              <MovieDetails movie={movie} />
+            </div>
+          ))
+        ) : (
+          <p>No movies found</p>
+        )}
+      </div>
+    </div>
+  );  
 };
 
 export default Home;

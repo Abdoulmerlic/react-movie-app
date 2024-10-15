@@ -1,0 +1,16 @@
+.movie-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 150px;
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .movie-card img {
+    width: 100%;
+  }
+  
+  .movie-card h3 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }

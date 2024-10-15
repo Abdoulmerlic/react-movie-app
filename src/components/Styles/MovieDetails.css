@@ -1,0 +1,10 @@
+.movie-details {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .movie-details img {
+    width: 300px;
+    border-radius: 8px;
+  }
+  
