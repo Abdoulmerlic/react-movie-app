@@ -1,28 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import MovieDetails from './MovieDetails'; // Import your MovieDetails component
 
-function Home() {
+const Home = () => {
   const [movies, setMovies] = useState([]);
-
+  const [error, setError] = useState(null);
+  
   useEffect(() => {
-    // Replace 'YOUR_API_KEY' with your actual TMDb API key
-    fetch(`https://api.themoviedb.org/3/movie/popular?e6b11a42d3a84da4f9bebcbe17194e7e`)
-      .then(response => response.json())
-      .then(data => setMovies(data.results));
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch movies');
+        }
+        const data = await response.json();
+        setMovies(data.results);
+      } catch (error) {
+        setError(error.message);
+        console.error('Error fetching movies:', error);
+      }
+    };
+
+    fetchMovies();
   }, []);
 
   return (
     <div>
       <h1>Movie List</h1>
-      <div className="movie-list">
-        {movies.map((movie) => (
-          <div key={movie.id}>
-            <h2>{movie.title}</h2>
-            <p>{movie.overview}</p>
-          </div>
-        ))}
-      </div>
+      {error && <p>Error: {error}</p>}
+      {movies.length > 0 ? (
+        movies.map(movie => (
+          <MovieDetails key={movie.id} movie={movie} /> // Use MovieDetails instead of MovieCard
+        ))
+      ) : (
+        <p>Loading movies...</p>
+      )}
     </div>
   );
-}
+};
 
 export default Home;
