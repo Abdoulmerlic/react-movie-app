@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import './Auth.css'; // If you have styling for Auth pages
+import './ForgotPassword.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle forgot password logic here (e.g., send email to reset password)
+    
   };
 
   return (
     <div className="forgot-password-container">
-      <h2>Forgot Password</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="forgot-password-form">
+        <h2>Forgot Password</h2>
         <div className="form-group">
           <label htmlFor="email">Enter your email:</label>
           <input
