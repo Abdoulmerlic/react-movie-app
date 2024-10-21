@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import MovieDetails from './MovieDetails';
 import './Home.css';
+import axios from 'axios'; // Import axios for OMDb API
 
 const Home = () => {
   const [availableMovies, setAvailableMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]); // State for search results
   const history = useNavigate(); // Hook to navigate to movie details
 
   useEffect(() => {
@@ -18,6 +20,7 @@ const Home = () => {
           throw new Error('Failed to fetch movies');
         }
         const data = await response.json();
+        console.log(data); // Log the data
         setAvailableMovies(data.results);
       } catch (error) {
         setError(error.message);
@@ -36,6 +39,7 @@ const Home = () => {
           throw new Error('Failed to fetch trending movies');
         }
         const data = await response.json();
+        console.log(data); // Log the data
         setTrendingMovies(data.results);
       } catch (error) {
         setError(error.message);
@@ -46,9 +50,16 @@ const Home = () => {
     fetchTrendingMovies();
   }, []);
 
-  const filteredAvailableMovies = availableMovies.filter(movie => 
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`https://www.omdbapi.com/?apikey=2fdc895&s=${searchTerm}`);
+      setSearchResults(response.data.Search || []);
+      console.log(response.data); // Log the search results
+    } catch (error) {
+      console.error("Error fetching search data:", error);
+    }
+  };
 
   // Function to handle movie click
   const handleMovieClick = (id) => {
@@ -58,14 +69,41 @@ const Home = () => {
   return (
     <div className="home">
       <h1>Movie List</h1>
-      <input 
-        type="text" 
-        placeholder="Search for a movie..." 
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} 
-      />
+      <form onSubmit={handleSearch}>
+        <input 
+          type="text" 
+          placeholder="Search for a movie..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} 
+        />
+        <button type="submit">Search</button>
+      </form>
 
       {error && <p>Error: {error}</p>}
+
+      {/* Search Results Section */}
+      <div className="section">
+        <h2>Search Results</h2>
+        <div className="movie-list">
+          {searchResults.length > 0 ? (
+            searchResults.map(movie => (
+              <div 
+                className="movie-card" 
+                key={movie.imdbID}
+                onClick={() => handleMovieClick(movie.imdbID)} // Click event
+              >
+                <img 
+                  src={movie.Poster !== 'N/A' ? movie.Poster : 'path/to/placeholder-image.png'} 
+                  alt={movie.Title} 
+                />
+                <p>{movie.Title}</p>
+              </div>
+            ))
+          ) : (
+            searchTerm && <p>No search results found</p>
+          )}
+        </div>
+      </div>
 
       {/* Trending Movies Section */}
       <div className="section">
@@ -78,7 +116,11 @@ const Home = () => {
                 key={movie.id}
                 onClick={() => handleMovieClick(movie.id)} // Click event
               >
-                <MovieDetails movie={movie} />
+                <img 
+                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'path/to/placeholder-image.png'} 
+                  alt={movie.title} 
+                />
+                <p>{movie.title}</p>
               </div>
             ))
           ) : (
@@ -91,14 +133,18 @@ const Home = () => {
       <div className="section">
         <h2>Available Movies</h2>
         <div className="movie-list">
-          {filteredAvailableMovies.length > 0 ? (
-            filteredAvailableMovies.map(movie => (
+          {availableMovies.length > 0 ? (
+            availableMovies.map(movie => (
               <div 
                 className="movie-card" 
                 key={movie.id}
                 onClick={() => handleMovieClick(movie.id)} // Click event
               >
-                <MovieDetails movie={movie} />
+                <img 
+                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'path/to/placeholder-image.png'} 
+                  alt={movie.title} 
+                />
+                <p>{movie.title}</p>
               </div>
             ))
           ) : (

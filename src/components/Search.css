@@ -1,0 +1,32 @@
+.search-container {
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .search-container input {
+    padding: 10px;
+    width: 300px;
+    margin-right: 10px;
+  }
+  
+  .search-container button {
+    padding: 10px 20px;
+  }
+  
+  .search-results ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .search-results li {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .search-results img {
+    width: 50px;
+    height: 75px;
+    margin-right: 10px;
+  }
+  

@@ -8,6 +8,7 @@ import About from './components/About'; // Import About component
 import Contact from './components/Contact'; // Import Contact component
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Search from './components/Search';
 const App = () => {
   return (
     <Router>
