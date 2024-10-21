@@ -7,7 +7,7 @@ import ForgotPassword from './components/Auth/ForgotPassword';
 import About from './components/About'; // Import About component
 import Contact from './components/Contact'; // Import Contact component
 import Navbar from './components/Navbar';
-
+import Footer from './components/Footer';
 const App = () => {
   return (
     <Router>
@@ -20,8 +20,9 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+       {/* Footer */}
+       <Footer />
     </Router>
   );
 };
-
 export default App;
