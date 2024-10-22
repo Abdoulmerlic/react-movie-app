@@ -7,35 +7,36 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [dob, setDob] = useState('');
   const [error, setError] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
     try {
-      // Normalize phone number
-      const normalizedPhone = phone.startsWith('0') ? phone.slice(1) : phone; // Remove leading zero
-      const phoneWithCode = `234${normalizedPhone}`; // Add country code
-
-      const response = await axios.post('https://your-api.com/api/auth/register', {
+      const response = await axios.post('https://api.mango.com/auth/register', {
         username,
         email,
         password,
-        phone: phoneWithCode, // Use normalized phone
-        dob,
+        phone,
+      }, {
+        headers: {
+          'API-Key': 'hvcnvdsg',
+          'Authorization': `Bearer 03d45600-a8e5-449b-82a2-f4bc41d97d70`,
+          'Content-Type': 'application/json', // Ensure content type is set
+        },
       });
-      // Redirect to login or home
-      window.location = '/login'; // Redirect to login page
-    } catch (err) {
-      setError('Registration failed');
-    }
-  };
 
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    // Allow only numbers and leading zero
-    if (/^\d*$/.test(value) || value === '') {
-      setPhone(value);
+      if (response.status === 200) {
+        // Redirect to login or home
+        window.location = '/login'; // Redirect to login page
+      } else {
+        setError('Registration failed. Please try again.'); // General error message
+      }
+    } catch (err) {
+      // Check if error has a response and set specific error message
+      const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
+      setError(errorMessage);
+      console.error('Error:', errorMessage); // Log the error for debugging
     }
   };
 
@@ -59,23 +60,17 @@ const Register = () => {
           required
         />
         <input
-          type="tel"
-          placeholder="Phone number (e.g., 08123456789)"
-          value={phone}
-          onChange={handlePhoneChange} // Call the new handlePhoneChange function
-          required
-        />
-        <input
-          type="date"
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
-          required
-        />
-        <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Phone (234XXXXXXXXXX)"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           required
         />
         <button type="submit">Register</button>
